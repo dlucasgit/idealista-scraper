@@ -156,17 +156,18 @@ async def main(page_url, filename) -> None:
             await page.goto(url)
             await asyncio.sleep(15)
             cookies_container = page.locator('div[data-testid="notice"]')
-
+            Actor.log.info('Estic dins la funcio, ja he trobat el cookies_container')
             # encara l'he de provar
             # button_aceptar = cookies_container.locator('button[aria-label="Aceptar y cerrar: Aceptar nuestro procesamiento de datos y cerrar"]')
 
             # encara l'he de provar
             button_aceptar = cookies_container.locator('//div/div[2]') # Aquest funciona
-
+            Actor.log.info('Ja he trobat el button_aceptar')
             # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
             await asyncio.sleep(10)
             await button_aceptar.click()
             #page.get_by_role('button', name='Aceptar y continuar').click()
+            Actor.log.info('Ja he fet click() al button_aceptar')
 
             i = 1
             await asyncio.sleep(3)
