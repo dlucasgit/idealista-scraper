@@ -48,7 +48,7 @@ async def main(page_url, filename) -> None:
 
         # Launch Playwright an open a new browser context
         Actor.log.info('Launching Playwright...')
-        async with async_playwright() as p:
+        async with async_playwright(url) as p:
 
             # FUNCIONS
             async def obtenir_num_propietats(page):
@@ -153,7 +153,7 @@ async def main(page_url, filename) -> None:
             # Iteramos a través de las páginas de resultados
             all_pisos = []
             page_number = 1
-            await page.goto(page_url)
+            await page.goto(url)
             await asyncio.sleep(15)
             cookies_container = page.locator('div[data-testid="notice"]')
 
