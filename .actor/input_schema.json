@@ -8,7 +8,7 @@
             "type": "array",
             "description": "URLs to start with",
             "prefill": [
-                { "url": "https://apify.com" }
+                { "url": "https://www.idealista.com/venta-viviendas/barcelona/eixample/la-sagrada-familia/con-metros-cuadrados-menos-de_100,solo-pisos,de-dos-dormitorios,dos-banos,ascensor,exterior,aireacondicionado,plantas-intermedias,buen-estado/" }
             ],
             "editor": "requestListSources"
         },
