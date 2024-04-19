@@ -164,7 +164,7 @@ async def main(page_url, filename) -> None:
             button_aceptar = cookies_container.locator('//div/div[2]') # Aquest funciona
 
             # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
             await button_aceptar.click()
             #page.get_by_role('button', name='Aceptar y continuar').click()
 
