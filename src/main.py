@@ -160,7 +160,7 @@ async def main(page_url, filename) -> None:
             # encara l'he de provar
             # button_aceptar = cookies_container.locator('button[aria-label="Aceptar y cerrar: Aceptar nuestro procesamiento de datos y cerrar"]')
 
-            # encara l'he de provar
+            # encara l'he de provare
             button_aceptar = cookies_container.locator('//div/div[2]') # Aquest funciona
             Actor.log.info('Ja he trobat el button_aceptar')
             # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
