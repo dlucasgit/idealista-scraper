@@ -30,6 +30,24 @@ async def main(page_url, filename) -> None:
     and it also enhances performance in the field of web scraping significantly.
     """
     async with Actor:
+        # Read the Actor input
+        actor_input = await Actor.get_input() or {}
+        start_urls = actor_input.get('start_urls', [{ 'url': 'https://www.idealista.com/venta-viviendas/barcelona/eixample/la-sagrada-familia/con-metros-cuadrados-menos-de_100,solo-pisos,de-dos-dormitorios,dos-banos,ascensor,exterior,aireacondicionado,plantas-intermedias,buen-estado/' }])
+        max_depth = actor_input.get('max_depth', 1)
+
+        if not start_urls:
+            Actor.log.info('No start URLs specified in actor input, exiting...')
+            await Actor.exit()
+
+        # Enqueue the starting URLs in the default request queue
+        default_queue = await Actor.open_request_queue()
+        for start_url in start_urls:
+            url = start_url.get('url')
+            Actor.log.info(f'Enqueuing {url} ...')
+            await default_queue.add_request({ 'url': url, 'userData': { 'depth': 0 }})
+
+        # Launch Playwright an open a new browser context
+        Actor.log.info('Launching Playwright...')
         async with async_playwright() as p:
 
             # FUNCIONS
