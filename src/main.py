@@ -172,7 +172,7 @@ async def main(page_url, filename) -> None:
                 Actor.log.info('Ja he trobat el button_aceptar')
                 # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
                 await asyncio.sleep(10)
-                await button_aceptar.click()
+                button_aceptar.click()
                 #page.get_by_role('button', name='Aceptar y continuar').click()
                 Actor.log.info('Ja he fet click() al button_aceptar')
 
