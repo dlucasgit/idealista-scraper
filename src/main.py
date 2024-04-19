@@ -48,7 +48,7 @@ async def main(page_url, filename) -> None:
 
         # Launch Playwright an open a new browser context
         Actor.log.info('Launching Playwright...')
-        async with async_playwright(url) as p:
+        async with async_playwright() as p:
 
             # FUNCIONS
             async def obtenir_num_propietats(page):
@@ -150,71 +150,78 @@ async def main(page_url, filename) -> None:
             context = await browser.new_context()
 
             page = await context.new_page()
-            # Iteramos a través de las páginas de resultados
-            all_pisos = []
-            page_number = 1
-            await page.goto(url)
-            await asyncio.sleep(15)
-            cookies_container = page.locator('div[data-testid="notice"]')
-            Actor.log.info('Estic dins la funcio, ja he trobat el cookies_container')
-            # encara l'he de provar
-            # button_aceptar = cookies_container.locator('button[aria-label="Aceptar y cerrar: Aceptar nuestro procesamiento de datos y cerrar"]')
+            # Process the requests in the queue one by one
+            while request := await default_queue.fetch_next_request():
+                url = request['url']
+                depth = request['userData']['depth']
+                Actor.log.info(f'Scraping {url} ...')
+                # Iteramos a través de las páginas de resultados
+                all_pisos = []
+                page_number = 1
 
-            # encara l'he de provare
-            button_aceptar = cookies_container.locator('//div/div[2]') # Aquest funciona
-            Actor.log.info('Ja he trobat el button_aceptar')
-            # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
-            await asyncio.sleep(10)
-            await button_aceptar.click()
-            #page.get_by_role('button', name='Aceptar y continuar').click()
-            Actor.log.info('Ja he fet click() al button_aceptar')
 
-            i = 1
-            await asyncio.sleep(3)
-            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-            time.sleep(3)
+                await page.goto(url)
+                await asyncio.sleep(15)
+                cookies_container = page.locator('div[data-testid="notice"]')
+                Actor.log.info('Estic dins la funcio, ja he trobat el cookies_container')
+                # encara l'he de provar
+                # button_aceptar = cookies_container.locator('button[aria-label="Aceptar y cerrar: Aceptar nuestro procesamiento de datos y cerrar"]')
 
-            # Obtenir numero de propietats
-            n_propietats = await obtenir_num_propietats(page)
+                # encara l'he de provare
+                button_aceptar = cookies_container.locator('//div/div[2]') # Aquest funciona
+                Actor.log.info('Ja he trobat el button_aceptar')
+                # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
+                await asyncio.sleep(10)
+                await button_aceptar.click()
+                #page.get_by_role('button', name='Aceptar y continuar').click()
+                Actor.log.info('Ja he fet click() al button_aceptar')
 
-            # Fer scroll fins a baix de tot de la pantalla per a que es carregui tota la pagina
-            #page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                i = 1
+                await asyncio.sleep(3)
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                time.sleep(3)
 
-            print("Entro al bucle")
+                # Obtenir numero de propietats
+                n_propietats = await obtenir_num_propietats(page)
 
-            j = 1
-            while True:
-                try:
-                    print(f'Carrego pagina: {j}')
+                # Fer scroll fins a baix de tot de la pantalla per a que es carregui tota la pagina
+                #page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
 
-                    await asyncio.sleep(5)
+                print("Entro al bucle")
 
-                    await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-
-                    await page.wait_for_selector('article')
-                    pisos_on_page = await extract_data_from_page(page, n_propietats, page_url)
-                    j = j+1
-                    if not pisos_on_page:
-                        break  # Si no hay más hoteles en la página, terminamos el bucle
-
-                    all_pisos.extend(pisos_on_page)
-                    page_number += 1
-                    print("Ja he executat la funcio, ara a comprobar si hi ha siguiente. Si no n'hi ha a exportar i tancar")
-                    await asyncio.sleep(3)
-                    # Hacemos clic en el botón "Siguiente" para avanzar a la siguiente página
+                j = 1
+                while True:
                     try:
-                        await page.get_by_role('link', name='Siguiente').click()
-                        # Assigno la url de la següent pagina a la variable per tornar a fer scraper
-                        page_url = page.url
-                        await page.goto(page_url)
-                        await asyncio.sleep(5)  # Esperamos un breve tiempo para que cargue la siguiente página
-                    except:
-                        print("No hi ha mes botons de 'Siguiente', sortim del bucle")
-                        break  # Si no hay más botones de "Siguiente", terminamos el bucle
+                        print(f'Carrego pagina: {j}')
 
-                except TimeoutError:
-                    print("Se ha excedido el tiempo de espera. Intentando cargar la página nuevamente...")
-                    continue  # Intentamos cargar la página nuevamente
+                        await asyncio.sleep(5)
+
+                        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+
+                        await page.wait_for_selector('article')
+                        pisos_on_page = await extract_data_from_page(page, n_propietats, page_url)
+                        j = j+1
+                        if not pisos_on_page:
+                            break  # Si no hay más hoteles en la página, terminamos el bucle
+
+                        all_pisos.extend(pisos_on_page)
+                        page_number += 1
+                        print("Ja he executat la funcio, ara a comprobar si hi ha siguiente. Si no n'hi ha a exportar i tancar")
+                        await asyncio.sleep(3)
+                        # Hacemos clic en el botón "Siguiente" para avanzar a la siguiente página
+                        try:
+                            await page.get_by_role('link', name='Siguiente').click()
+                            # Assigno la url de la següent pagina a la variable per tornar a fer scraper
+                            page_url = page.url
+                            await page.goto(page_url)
+                            await asyncio.sleep(5)  # Esperamos un breve tiempo para que cargue la siguiente página
+                        except:
+                            print("No hi ha mes botons de 'Siguiente', sortim del bucle")
+                            break  # Si no hay más botones de "Siguiente", terminamos el bucle
+
+                    except TimeoutError:
+                        print("Se ha excedido el tiempo de espera. Intentando cargar la página nuevamente...")
+                        continue  # Intentamos cargar la página nuevamente
 
             if len(all_pisos) > 0 :
                 # Convertimos todos los datos recopilados en un DataFrame de Pandas
