@@ -173,6 +173,7 @@ async def main(page_url, filename) -> None:
                 # button_aceptar = page.locator('/html/body/div[1]/div/div/div/div/div[2]/button[3]')
                 await asyncio.sleep(10)
                 await button_aceptar.click()
+
                 #page.get_by_role('button', name='Aceptar y continuar').click()
                 Actor.log.info('Ja he fet click() al button_aceptar')
 
@@ -198,7 +199,7 @@ async def main(page_url, filename) -> None:
 
                         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
 
-                        await page.wait_for_selector('article')
+                        await page.wait_for_selector('article', timeout=60000)
                         pisos_on_page = await extract_data_from_page(page, n_propietats, page_url)
                         j = j+1
                         if not pisos_on_page:
