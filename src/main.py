@@ -105,13 +105,14 @@ async def main(page_url, filename) -> None:
                         pis_dict['districte'] = districte
 
                         locator_preus = pis.locator('//div/div[@class="price-row"]')
-
+                        Actor.log.info('Dins el for de extract_data_from_page')
                         preus = await locator_preus.all_inner_texts()
                         # preu_sense_simbol = preu[2:]
                         preu = preus[0]
                         pis_dict['preu'] = preu
                         pis_dict['filtres'] = filtres
                         print(preu)
+                        Actor.log.info(preu)
                         pis_dict['num_propietats'] = n_prop
                         pis_dict['data'] = data_extraccio
                         pis_dict['link'] = link
