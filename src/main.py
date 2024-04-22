@@ -203,7 +203,7 @@ async def main(page_url, filename) -> None:
 
                         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
 
-                        await page.wait_for_selector('article[@class="item"]', timeout=30000)
+                        # await page.wait_for_selector('article[@class="item"]', timeout=30000)
                         pisos_on_page = await extract_data_from_page(page, n_propietats, page_url)
                         j = j+1
                         if not pisos_on_page:
