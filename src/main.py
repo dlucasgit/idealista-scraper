@@ -31,7 +31,7 @@ async def main(page_url, filename) -> None:
     and it also enhances performance in the field of web scraping significantly.
     """
     async with Actor:
-        proxy_configuration = await Actor.create_proxy_configuration()
+        """ proxy_configuration = await Actor.create_proxy_configuration()
         proxy_url = await proxy_configuration.new_url()
 
         proxies = {
@@ -40,7 +40,7 @@ async def main(page_url, filename) -> None:
         }
 
         response = requests.get('https://api.apify.com/v2/browser-info', proxies=proxies)
-        print(response.text)
+        print(response.text) """
 
         # Read the Actor input
         actor_input = await Actor.get_input() or {}
@@ -161,7 +161,7 @@ async def main(page_url, filename) -> None:
             """
             # FINAL FUNCIONS
 
-            browser = await p.chromium.launch(headless=False)
+            browser = await p.chromium.launch(headless=True)
             context = await browser.new_context()
 
             page = await context.new_page()
