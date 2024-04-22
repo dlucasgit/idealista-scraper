@@ -18,19 +18,39 @@
 					"title": "URLs and their titles",
 					"transformation": {
 						"fields": [
-							"url",
-							"title"
+							"poblacio",
+							"districte",
+                            "preu",
+                            "num_propietats",
+                            "data",
+                            "link"
 						]
 					},
 					"display": {
 						"component": "table",
 						"properties": {
-							"url": {
-								"label": "URL",
+							"poblacio": {
+								"label": "Poblacio",
 								"format": "text"
 							},
-							"title": {
-								"label": "Title",
+							"districte": {
+								"label": "Districte",
+								"format": "text"
+							},
+                            "preu": {
+								"label": "Preu",
+								"format": "text"
+							},
+							"num_propietats": {
+								"label": "Num. propietats",
+								"format": "text"
+							},
+                            "data": {
+								"label": "Data",
+								"format": "text"
+							},
+							"link": {
+								"label": "link",
 								"format": "text"
 							}
 						}
