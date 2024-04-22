@@ -90,7 +90,7 @@ async def main(page_url, filename) -> None:
                     data_extraccio = datetime.datetime.now().date()
                     # pisos = page.locator('div[class="item-info-container"]').all()
                     # amb xpath completo
-                    pisos = await page.locator('article').filter(has=page.locator('//div/div[@class="price-row"]')).all()
+                    pisos = await page.locator('article[@class="item"]').filter(has=page.locator('//div/div[@class="price-row"]')).all()
                     num_propietats = len(pisos)
                     print(f'Hi ha: {num_propietats} pisos.')
 
@@ -203,7 +203,7 @@ async def main(page_url, filename) -> None:
 
                         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
 
-                        await page.wait_for_selector('article', timeout=60000)
+                        await page.wait_for_selector('article[@class="item"]', timeout=30000)
                         pisos_on_page = await extract_data_from_page(page, n_propietats, page_url)
                         j = j+1
                         if not pisos_on_page:
