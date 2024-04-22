@@ -61,7 +61,8 @@ async def main(page_url, filename) -> None:
 
                     # Utilizar el método find() o select_one() para encontrar el primer elemento <h1>
                     h1_element = soup.find('h1')  # O también puedes usar soup.select_one('h1')
-                    print(h1_element.text)
+                    Actor.log.info('Dins de obtenir_num_propietats')
+                    Actor.log.info(h1_element.text)
                     # Verificar si se encontró el elemento <h1>
                     if h1_element:
                         # Capturar el texto dentro del elemento <h1>
