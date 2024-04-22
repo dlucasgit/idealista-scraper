@@ -203,7 +203,7 @@ async def main(page_url, filename) -> None:
                         await asyncio.sleep(5)
 
                         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                        articleLocator = await page.locator('article')
+                        articleLocator =  page.locator('article')
 
                         #await page.wait_for_selector('article[@class="item"]', timeout=30000)
 
