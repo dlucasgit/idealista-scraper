@@ -161,7 +161,7 @@ async def main(page_url, filename) -> None:
             """
             # FINAL FUNCIONS
 
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=Actor.config.headless)
             context = await browser.new_context()
 
             page = await context.new_page()
