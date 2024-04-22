@@ -16,6 +16,7 @@ import datetime
 import time
 import asyncio
 import re
+import requests, asyncio
 
 # To run this Actor locally, you need to have the Playwright browsers installed.
 # Run `playwright install --with-deps` in the Actor's virtual environment to install them.
@@ -30,6 +31,17 @@ async def main(page_url, filename) -> None:
     and it also enhances performance in the field of web scraping significantly.
     """
     async with Actor:
+        proxy_configuration = await Actor.create_proxy_configuration()
+        proxy_url = await proxy_configuration.new_url()
+
+        proxies = {
+            'http': proxy_url,
+            'https': proxy_url,
+        }
+
+        response = requests.get('https://api.apify.com/v2/browser-info', proxies=proxies)
+        print(response.text)
+
         # Read the Actor input
         actor_input = await Actor.get_input() or {}
         start_urls = actor_input.get('start_urls', [{ 'url': 'https://www.idealista.com/venta-viviendas/barcelona/eixample/la-sagrada-familia/con-metros-cuadrados-menos-de_100,solo-pisos,de-dos-dormitorios,dos-banos,ascensor,exterior,aireacondicionado,plantas-intermedias,buen-estado/' }])
