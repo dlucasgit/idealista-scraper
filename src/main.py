@@ -176,8 +176,6 @@ async def main(page_url, filename) -> None:
                 await button_aceptar.click()
 
 
-                button_aceptar.click()
-
                 #page.get_by_role('button', name='Aceptar y continuar').click()
                 Actor.log.info('Ja he fet click() al button_aceptar')
 
